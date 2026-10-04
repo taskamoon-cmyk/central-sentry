@@ -1,0 +1,21 @@
+# TLS-terminating reverse proxy in front of Sentry's own nginx
+# (which listens on 127.0.0.1:9000). Caddy obtains and renews
+# Let's Encrypt certificates automatically.
+name: sentry-proxy
+
+services:
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      SENTRY_DOMAIN: ${SENTRY_DOMAIN:?set SENTRY_DOMAIN in .env}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,5 @@
+# Upstream getsentry/self-hosted checkout (managed by scripts/install.sh)
+/self-hosted/
+# Real config with secrets
+/.env
+/backups/

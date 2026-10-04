@@ -1,0 +1,23 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$SENTRY_DOMAIN} {
+	encode zstd gzip
+
+	# Sentry's bundled nginx routes /api/<id>/envelope/ etc. to Relay.
+	reverse_proxy 127.0.0.1:9000 {
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Forwarded-Host {host}
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
